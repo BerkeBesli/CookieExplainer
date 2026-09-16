@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <title>CookieExplainer</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            width: 320px;
+            margin: 0;
+            padding: 24px;
+            background-color: #ffffff;
+            color: #1e293b;
+            box-sizing: border-box;
+        }
+        /* Üst Bilgi */
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-bottom: 16px;
+            border-bottom: 2px solid #f1f5f9;
+            margin-bottom: 24px;
+        }
+        .header h2 { margin: 0; font-size: 16px; font-weight: 700; color: #0f172a; }
+        .domain-badge { font-size: 11px; background: #e0f2f1; color: #1cb3b4; padding: 4px 10px; border-radius: 12px; font-weight: 600; }
+        
+        /* Animasyonlu Skor Alanı */
+        .score-wrapper {
+            position: relative;
+            width: 120px;
+            height: 120px;
+            margin: 0 auto 24px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: #f8fafc;
+            border-radius: 30px;
+            box-shadow: inset 0 2px 4px rgba(0,0,0,0.02);
+            transition: background 0.5s ease;
+        }
+        /* SVG Büyüteç (Dedektif) */
+        .mag-glass {
+            width: 48px;
+            height: 48px;
+            stroke: #1cb3b4; /* İkonun turkuaz rengi */
+            z-index: 2;
+            transition: all 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+        /* Arama Animasyonu (Sağa Sola Gezinme) */
+        .searching {
+            animation: searchAnim 1.5s infinite ease-in-out alternate;
+        }
+        @keyframes searchAnim {
+            0% { transform: translate(-10px, -10px) rotate(-10deg); }
+            100% { transform: translate(10px, 10px) rotate(10deg); }
+        }
+        /* Gizli Harf Skoru */
+        .revealed-score {
+            position: absolute;
+            font-size: 64px;
+            font-weight: 800;
+            color: #1cb3b4;
+            opacity: 0;
+            transform: scale(0.5);
+            transition: all 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+            z-index: 3;
+        }
+        /* JavaScript ile eklenecek "Sonuç Bulundu" Sınıfı */
+        .reveal-mode .mag-glass {
+            transform: scale(4);
+            opacity: 0;
+        }
+        .reveal-mode .revealed-score {
+            opacity: 1;
+            transform: scale(1);
+        }
+
+        /* Özet Kutusu */
+        .summary-box {
+            background: #f8fafc;
+            padding: 16px;
+            border-radius: 12px;
+            font-size: 13px;
+            line-height: 1.6;
+            color: #475569;
+            text-align: center;
+            margin-bottom: 24px;
+            min-height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* Buton */
+        .action-btn {
+            background: #1cb3b4;
+            color: white;
+            border: none;
+            padding: 14px;
+            border-radius: 12px;
+            width: 100%;
+            font-weight: 600;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            box-shadow: 0 4px 12px rgba(28, 179, 180, 0.25);
+        }
+        .action-btn:hover {
+            background: #159b9c;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(28, 179, 180, 0.4);
+        }
+        .action-btn:disabled {
+            background: #cbd5e1;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="header">
+        <h2>CookieExplainer</h2>
+        <span id="domain-name" class="domain-badge">Yükleniyor...</span>
+    </div>
+
+    <!-- Animasyonlu Skor Alanı -->
+    <div id="score-container" class="score-wrapper">
+        <!-- SVG Büyüteç (Başlangıçta bu görünür ve hareket eder) -->
+        <svg class="mag-glass searching" id="mag-icon" viewBox="0 0 24 24" fill="none" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="11" cy="11" r="8"></circle>
+            <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+        </svg>
+        
+        <!-- Harf Skoru (Başlangıçta gizlidir, zoom sonrası ortaya çıkar) -->
+        <div id="privacy-score" class="revealed-score"></div>
+    </div>
+
+    <div class="summary-box" id="ai-summary">
+        Sitenin politikaları ve çerezleri taranıyor...
+    </div>
+
+    <button id="reject-btn" class="action-btn" disabled>Çerezleri Engelle</button>
+
+    <script src="popup.js"></script>
+</body>
+</html>
