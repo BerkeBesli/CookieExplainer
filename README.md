@@ -14,5 +14,5 @@ CookieExplainer, kullanıcıların ziyaret ettikleri web sitelerinin çerez poli
 *   **Paranoid Mode:** Tek tıkla sayfadaki çerez reddetme butonlarını bulup otomatik tıklar.
 *   **Akıllı Önbellek (Caching):** Analiz edilen siteleri Supabase üzerinde 30 gün boyunca tutarak API maliyetlerini düşürür ve hızı artırır.
 
-## 🛠️ Kurulum (Geliştiriciler İçin)
-Proje `backend` ve `extension` olmak üzere iki ana modülden oluşmaktadır. Geliştirme ortamında ayağa kaldırmak için... *(Buraya ileride uvicorn ve chrome extension yükleme adımlarını yazabiliriz).*
+## 🛠️ Kurulum 
+Proje `backend` ve `extension` olmak üzere iki ana modülden oluşmaktadır. Geliştirme ortamında ayağa kaldırmak için... 
