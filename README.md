@@ -60,7 +60,7 @@ python -m uvicorn app.main:app --reload
 # Sunucu [http://127.0.0.1:8000](http://127.0.0.1:8000) adresinde çalışmaya başlayacaktır.
 ```
 
-2. **Eklenti (Frontend) Kurulumu**
+*  2. **Eklenti (Frontend) Kurulumu**
 Google Chrome'u açın ve adres çubuğuna chrome://extensions/ yazın.
 
 Sağ üst köşeden "Geliştirici modu"nu (Developer mode) aktif edin.
@@ -71,7 +71,7 @@ Klonladığınız proje dizinindeki extension klasörünü seçin.
 
 CookieExplainer tarayıcınıza eklenecektir!
 
-**🔮 Gelecek Planları (Faz 3)**
+*  **🔮 Gelecek Planları (Faz 3)**
 Web Scraper Entegrasyonu: Ana sayfada sözleşme bulunmadığı durumlarda (örn. YouTube), eklentinin sayfa altındaki "Gizlilik Politikası" linklerini otomatik bulup o sayfanın içine dalarak okuması.
 
 Çoklu Dil Desteği: LLM promptlarının tarayıcı diline göre dinamik olarak İngilizce/Türkçe yanıt üretmesi.
