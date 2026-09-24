@@ -1,18 +1,34 @@
-# CookieExplainer 🍪🔍
+# CookieExplainer 🍪🛡️
+**AI-Powered Privacy Assistant & Autonomous Cookie Blocker**
 
-CookieExplainer, kullanıcıların ziyaret ettikleri web sitelerinin çerez politikalarını ve gizlilik sözleşmelerini yapay zeka kullanarak saniyeler içinde analiz eden ve sitelere A'dan F'ye kadar güvenlik skoru veren bir Chrome eklentisidir.
+CookieExplainer, kullanıcıların web sitelerindeki çerez karmaşasından kurtulmasını sağlayan, gizlilik politikalarını yapay zeka ile saniyeler içinde özetleyen ve "Dark Pattern" (karanlık tasarım) çerez tuzaklarını otonom olarak alt eden modern bir Chrome eklentisidir.
 
-## 🚀 Teknolojiler
-*   **Frontend:** Chrome Extension (Manifest V3), HTML, CSS, JavaScript
-*   **Backend:** Python, FastAPI
-*   **Yapay Zeka:** Groq API (Llama 3 OSS 20B)
-*   **Veritabanı:** Supabase (PostgreSQL)
+## 🚀 Öne Çıkan Özellikler 
 
-## ⚙️ Özellikler
-*   **Anlık Analiz:** Sitenin çerezlerini ve (varsa) gizlilik politikasını tarar.
-*   **Akıllı Skorlama:** Özel kural motoru ve LLM değerlendirmesiyle A (Güvenli) ile F (Tehlikeli) arası skor üretir.
-*   **Paranoid Mode:** Tek tıkla sayfadaki çerez reddetme butonlarını bulup otomatik tıklar.
-*   **Akıllı Önbellek (Caching):** Analiz edilen siteleri Supabase üzerinde 30 gün boyunca tutarak API maliyetlerini düşürür ve hızı artırır.
+*   **🛡️ 3 Aşamalı Otonom Kalkan (Terminator Bot):** Sitelere girdiğinizde sinsi çerez pop-up'larını arka planda yok eder. "Reddet" butonu gizlenmiş olsa bile sırasıyla şu 3 hamleyi yapar:
+    1. "Tümünü Reddet" butonunu arar ve vurur.
+    2. Bulamazsa, "Sadece Zorunlu Olanları Kabul Et" seçeneğiyle takipçileri bloklar.
+    3. Hileli sitelerde (örn. HyperX) "Ayarlar" menüsüne sızıp tercihleri güvenli şekilde kaydeder.
+*   **🧠 Yapay Zeka Destekli Analiz:** Sayfa metinlerini **Groq API (OpenAI/GPT-OSS-20B)** ile analiz eder. Hukuki ve karmaşık gizlilik metinlerini saniyeler içinde A'dan F'ye kadar skorlayarak basit bir dille özetler.
+*   **⚡ Kendi Kendini İyileştiren Önbellek (Self-Healing Cache):** Analiz edilen siteler **Supabase (PostgreSQL)** üzerinde 30 gün boyunca saklanır. Aynı siteye tekrar girildiğinde API maliyeti sıfıra iner ve yanıt hızı milisaniyelere düşer. API hatalarında cache kendini otomatik temizler.
+*   **✨ Yüzen Kart (Floating Card) Arayüzü:** Özel turkuaz tasarım, dinamik ikon animasyonları (Büyüteç ↔ Kalkan dönüşümü), engellenen çerez sayacı ve kullanıcının güvendiği siteler için tek tıkla **Whitelist (Güvenilir Liste)** yönetimi.
 
-## 🛠️ Kurulum 
-Proje `backend` ve `extension` olmak üzere iki ana modülden oluşmaktadır. Geliştirme ortamında ayağa kaldırmak için... 
+## 🛠️ Mimari ve Teknoloji Yığını (Tech Stack)
+
+Proje, frontend ve backend olarak izole edilmiş bir **Monorepo** mimarisine sahiptir:
+
+*   **Frontend (Eklenti):** Manifest V3, HTML5, CSS3, Vanilla JavaScript (ES6+), DOM MutationObserver.
+*   **Backend (API):** Python 3.10+, FastAPI, Uvicorn.
+*   **Yapay Zeka & Veritabanı:** Groq Cloud (LLM), Supabase (Vector/Postgres).
+
+```text
+CookieExplainer/
+├── backend/               # FastAPI sunucusu, LLM promptları ve Supabase bağlantısı
+│   ├── app/
+│   ├── requirements.txt
+│   └── .env               # (Git'ten izole edilmiştir)
+└── extension/             # Chrome Eklenti dosyaları
+    ├── manifest.json
+    ├── content.js         # Otonom Saha Ajanı (Pop-up avcısı)
+    ├── background.js      # API iletişim işçisi
+    └── popup.html / .js   # Kullanıcı Arayüzü
