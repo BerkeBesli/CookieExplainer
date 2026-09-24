@@ -35,3 +35,52 @@ CookieExplainer/
     ├── content.js         # Otonom Saha Ajanı (Pop-up avcısı)
     ├── background.js      # API iletişim işçisi
     └── popup.html / .js   # Kullanıcı Arayüzü
+```
+
+## ⚙️ Kurulum ve Çalıştırma (Geliştiriciler İçin)
+
+Projeyi kendi lokal ortamınızda test etmek için aşağıdaki adımları izleyin:
+
+### 1. Backend Kurulumu
+```bash
+# Repo'yu klonlayın
+git clone [https://github.com/KULLANICI_ADIN/CookieExplainer.git](https://github.com/KULLANICI_ADIN/CookieExplainer.git)
+cd CookieExplainer/backend
+
+# Gerekli kütüphaneleri yükleyin
+pip install -r requirements.txt
+
+# Backend klasörü içine bir .env dosyası oluşturun ve kendi API anahtarlarınızı ekleyin:
+GROQ_API_KEY=your_groq_api_key_here
+SUPABASE_URL=your_supabase_url_here
+SUPABASE_KEY=your_supabase_anon_key_here
+
+# Sunucuyu ayağa kaldırın:
+python -m uvicorn app.main:app --reload
+# Sunucu [http://127.0.0.1:8000](http://127.0.0.1:8000) adresinde çalışmaya başlayacaktır.
+```
+
+2. **Eklenti (Frontend) Kurulumu**
+Google Chrome'u açın ve adres çubuğuna chrome://extensions/ yazın.
+
+Sağ üst köşeden "Geliştirici modu"nu (Developer mode) aktif edin.
+
+Sol üstteki "Paketlenmemiş öğe yükle" (Load unpacked) butonuna tıklayın.
+
+Klonladığınız proje dizinindeki extension klasörünü seçin.
+
+CookieExplainer tarayıcınıza eklenecektir!
+
+**🔮 Gelecek Planları (Faz 3)**
+Web Scraper Entegrasyonu: Ana sayfada sözleşme bulunmadığı durumlarda (örn. YouTube), eklentinin sayfa altındaki "Gizlilik Politikası" linklerini otomatik bulup o sayfanın içine dalarak okuması.
+
+Çoklu Dil Desteği: LLM promptlarının tarayıcı diline göre dinamik olarak İngilizce/Türkçe yanıt üretmesi.
+
+Geliştirici: Berke Beşli
+
+
+
+
+
+
+
