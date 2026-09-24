@@ -1,82 +1,123 @@
 // popup.js
 document.addEventListener("DOMContentLoaded", () => {
+    const domainBadge = document.getElementById("domain-badge");
     const domainNameEl = document.getElementById("domain-name");
     const scoreContainer = document.getElementById("score-container");
-    const magIcon = document.getElementById("mag-icon");
+    const centerIcon = document.getElementById("center-icon");
     const scoreText = document.getElementById("privacy-score");
     const summaryBox = document.getElementById("ai-summary");
-    const rejectBtn = document.getElementById("reject-btn");
+    const scoreTooltip = document.getElementById("score-tooltip");
+    const blockerToggle = document.getElementById("blocker-toggle");
+    const blockedCountEl = document.getElementById("blocked-count");
+    const resetBtn = document.getElementById("reset-counter-btn");
 
-    // Domain adını ekrana yaz
+    let currentDomain = "";
+
+    // İkon SVG Yolları
+    const magSVG = `<circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line>`;
+    const shieldSVG = `<path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>`;
+
+    // 1. Ayarları Yükle ve Domain'i Bul
     chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
         if (tabs[0] && tabs[0].url) {
             const url = new URL(tabs[0].url);
-            // Sadece domain'i al (örn: www.imdb.com)
-            domainNameEl.textContent = url.hostname.replace('www.', '');
+            currentDomain = url.hostname.replace('www.', '');
+            domainNameEl.textContent = currentDomain;
+
+            // Hafızadan verileri çek
+            chrome.storage.local.get(["cookieBlockerActive", "blockedCount", "whitelist"], (result) => {
+                const isActive = result.cookieBlockerActive || false;
+                const whitelist = result.whitelist || [];
+                
+                blockerToggle.checked = isActive;
+                blockedCountEl.textContent = result.blockedCount || 0;
+                
+                // İkon Değişimi: Blocker açıksa Kalkan, kapalıysa Büyüteç
+                centerIcon.innerHTML = isActive ? shieldSVG : magSVG;
+
+                // Whitelist Kontrolü
+                if (whitelist.includes(currentDomain)) {
+                    domainBadge.classList.add("whitelisted");
+                    domainBadge.title = "Korumayı Aç (Şu an Whitelist'te)";
+                }
+            });
         }
     });
 
-    // Backend'e analiz isteğini gönder
-    chrome.runtime.sendMessage({ action: "ANALYZE_SITE" }, (response) => {
-        // Arama animasyonunu (sağa sola sallanmayı) durdur
-        magIcon.classList.remove("searching");
+    // 2. Kalkan Anahtarı (Toggle) Değişimi
+    blockerToggle.addEventListener("change", (e) => {
+        const isActive = e.target.checked;
+        chrome.storage.local.set({ cookieBlockerActive: isActive });
+        centerIcon.innerHTML = isActive ? shieldSVG : magSVG;
+        
+        if(isActive) {
+            chrome.action.setBadgeText({ text: "ON" });
+            chrome.action.setBadgeBackgroundColor({ color: "#1cb3b4" });
+        } else {
+            chrome.action.setBadgeText({ text: "" });
+        }
+    });
 
+    // 3. Whitelist (Güvenilir Liste) Tıklaması
+    domainBadge.addEventListener("click", () => {
+        chrome.storage.local.get(["whitelist"], (result) => {
+            let whitelist = result.whitelist || [];
+            
+            if (whitelist.includes(currentDomain)) {
+                // Listeden çıkar
+                whitelist = whitelist.filter(d => d !== currentDomain);
+                domainBadge.classList.remove("whitelisted");
+                domainBadge.title = "Bu sitede korumayı kapat";
+            } else {
+                // Listeye ekle
+                whitelist.push(currentDomain);
+                domainBadge.classList.add("whitelisted");
+                domainBadge.title = "Korumayı Aç (Şu an Whitelist'te)";
+            }
+            chrome.storage.local.set({ whitelist: whitelist });
+        });
+    });
+
+    // 4. Sayaç Sıfırlama ve Pulse Efekti
+    resetBtn.addEventListener("click", () => {
+        chrome.storage.local.set({ blockedCount: 0 }, () => {
+            blockedCountEl.textContent = "0";
+            blockedCountEl.classList.remove("pulse-effect"); // Animasyonu sıfırla
+            void blockedCountEl.offsetWidth; // Reflow tetikle
+            blockedCountEl.classList.add("pulse-effect"); // Animasyonu oynat
+        });
+    });
+
+    // 5. Analizi Başlat ve Tooltip'i Doldur
+    chrome.runtime.sendMessage({ action: "ANALYZE_SITE" }, (response) => {
+        centerIcon.classList.remove("searching");
+        
         if (response && response.success) {
             const data = response.data;
             scoreText.textContent = data.grade;
 
-            // Skora göre metin rengini belirle
-            let gradeColor = "#1cb3b4"; // Turkuaz (Varsayılan)
-            let bgColor = "#f8fafc";
-            
+            // Tooltip içeriğini oluştur (Örn: "Tehlike: Sitede 5 adet takip çerezi var!")
+            let cookiesCount = Object.keys(data.technical_cookies).length;
+            scoreTooltip.textContent = `Sitede ${cookiesCount} adet takipçi çerez tespit edildi.`;
+
+            let gradeColor = "#1cb3b4"; let bgColor = "#f8fafc";
             if (data.grade === "A" || data.grade === "B") {
-                gradeColor = "#10b981"; // Zümrüt Yeşili
-                bgColor = "#ecfdf5";
+                gradeColor = "#10b981"; bgColor = "#ecfdf5";
             } else if (data.grade === "C") {
-                gradeColor = "#f59e0b"; // Kehribar Sarısı
-                bgColor = "#fffbeb";
+                gradeColor = "#f59e0b"; bgColor = "#fffbeb";
             } else {
-                gradeColor = "#ef4444"; // Kırmızı
-                bgColor = "#fef2f2";
+                gradeColor = "#ef4444"; bgColor = "#fef2f2";
             }
 
             scoreText.style.color = gradeColor;
             scoreContainer.style.background = bgColor;
             summaryBox.textContent = data.summary;
-            
-            // "Paranoid Mode" butonunu aktif et
-            rejectBtn.disabled = false;
-
         } else {
-            // Hata Durumu
             scoreText.textContent = "?";
             scoreText.style.color = "#64748b";
-            summaryBox.textContent = "Bağlantı hatası: Sunucuya ulaşılamıyor.";
+            summaryBox.textContent = "Analiz yapılamadı.";
+            scoreTooltip.textContent = "Hata oluştu.";
         }
-
-        // Büyüteci zoom yapıp kaybeden ve Harfi ortaya çıkartan sınıfı ekle
         scoreContainer.classList.add("reveal-mode");
-    });
-
-    // Çerezleri Engelle Butonu
-    rejectBtn.addEventListener("click", () => {
-        rejectBtn.textContent = "İşleniyor...";
-        chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
-            chrome.tabs.sendMessage(tabs[0].id, { action: "AUTO_REJECT" }, (response) => {
-                if (response && response.success) {
-                    rejectBtn.textContent = "Çerezler Reddedildi!";
-                    rejectBtn.style.background = "#10b981"; // Başarılı Yeşili
-                } else {
-                    rejectBtn.textContent = "Buton Bulunamadı";
-                    rejectBtn.style.background = "#ef4444"; // Hata Kırmızısı
-                }
-                
-                // 3 saniye sonra butonu eski haline getir
-                setTimeout(() => {
-                    rejectBtn.textContent = "Çerezleri Engelle";
-                    rejectBtn.style.background = "#1cb3b4";
-                }, 3000);
-            });
-        });
     });
 });

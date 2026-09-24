@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "CookieExplainer",
-  "version": "1.0",
+  "version": "2.1.1",
   "description": "Yapay zeka destekli çerez ve gizlilik analiz eklentisi.",
   "permissions": [
     "activeTab",
@@ -13,14 +13,12 @@
     "<all_urls>",
     "http://127.0.0.1:8000/*"
   ],
- "icons": {
-    "128": "icon.jpg"
+  "icons": {
+    "128": "icon.png"
   },
- "action": {
+  "action": {
     "default_popup": "popup.html",
-    "default_icon": {
-      "128": "icon.jpg"
-    }
+    "default_icon": "icon.png"
   },
   "background": {
     "service_worker": "background.js"

@@ -4,146 +4,130 @@
     <meta charset="UTF-8">
     <title>CookieExplainer</title>
     <style>
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-            width: 320px;
-            margin: 0;
-            padding: 24px;
-            background-color: #ffffff;
-            color: #1e293b;
+       /* popup.html - YENİ CSS */
+        html, body {
+            width: 320px !important;
+            height: 480px !important;
+            margin: 0 !important;
+            padding: 0 !important;
+            background-color: #1cb3b4 !important; /* Arka plan TIKLIM TIKLIM TURKUAZ */
+            border-radius: 0 !important; /* Dış pencerede ASLA yuvarlama yok, köşeleri doldur */
+            overflow: hidden !important;
+        }
+
+        .app-wrapper {
+            background-color: #ffffff; /* Senin dediğin ortadaki beyaz kısım */
+            margin: 6px !important; /* Dışarıdan 6px turkuaz pay bırak */
+            height: calc(100% - 12px) !important;
+            border-radius: 12px !important; /* Sadece beyaz alanı yuvarla */
+            padding: 16px 20px;
             box-sizing: border-box;
-        }
-        /* Üst Bilgi */
-        .header {
             display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding-bottom: 16px;
-            border-bottom: 2px solid #f1f5f9;
-            margin-bottom: 24px;
+            flex-direction: column;
         }
-        .header h2 { margin: 0; font-size: 16px; font-weight: 700; color: #0f172a; }
-        .domain-badge { font-size: 11px; background: #e0f2f1; color: #1cb3b4; padding: 4px 10px; border-radius: 12px; font-weight: 600; }
-        
-        /* Animasyonlu Skor Alanı */
-        .score-wrapper {
-            position: relative;
-            width: 120px;
-            height: 120px;
-            margin: 0 auto 24px;
+        /* Sayacın en altta sabit durması için */
+        .counter-wrapper {
+            margin-top: auto; 
             display: flex;
             justify-content: center;
             align-items: center;
-            background: #f8fafc;
-            border-radius: 30px;
-            box-shadow: inset 0 2px 4px rgba(0,0,0,0.02);
-            transition: background 0.5s ease;
-        }
-        /* SVG Büyüteç (Dedektif) */
-        .mag-glass {
-            width: 48px;
-            height: 48px;
-            stroke: #1cb3b4; /* İkonun turkuaz rengi */
-            z-index: 2;
-            transition: all 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
-        }
-        /* Arama Animasyonu (Sağa Sola Gezinme) */
-        .searching {
-            animation: searchAnim 1.5s infinite ease-in-out alternate;
-        }
-        @keyframes searchAnim {
-            0% { transform: translate(-10px, -10px) rotate(-10deg); }
-            100% { transform: translate(10px, 10px) rotate(10deg); }
-        }
-        /* Gizli Harf Skoru */
-        .revealed-score {
-            position: absolute;
-            font-size: 64px;
-            font-weight: 800;
-            color: #1cb3b4;
-            opacity: 0;
-            transform: scale(0.5);
-            transition: all 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
-            z-index: 3;
-        }
-        /* JavaScript ile eklenecek "Sonuç Bulundu" Sınıfı */
-        .reveal-mode .mag-glass {
-            transform: scale(4);
-            opacity: 0;
-        }
-        .reveal-mode .revealed-score {
-            opacity: 1;
-            transform: scale(1);
-        }
-
-        /* Özet Kutusu */
-        .summary-box {
-            background: #f8fafc;
-            padding: 16px;
-            border-radius: 12px;
+            gap: 8px;
             font-size: 13px;
-            line-height: 1.6;
-            color: #475569;
-            text-align: center;
-            margin-bottom: 24px;
-            min-height: 60px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
+            color: #64748b;
+            position: relative;
         }
+        
+        /* Whitelist & Header */
+        .header { display: flex; justify-content: space-between; align-items: center; padding-bottom: 16px; border-bottom: 2px solid #f1f5f9; margin-bottom: 20px; }
+        .header h2 { margin: 0; font-size: 16px; font-weight: 700; color: #0f172a; }
+        .domain-badge { display: flex; align-items: center; gap: 6px; font-size: 11px; background: #e0f2f1; color: #1cb3b4; padding: 4px 10px; border-radius: 12px; font-weight: 600; cursor: pointer; transition: 0.3s; }
+        .domain-badge:hover { background: #ccfbf1; }
+        .domain-badge.whitelisted { background: #fef2f2; color: #ef4444; } /* Beyaz listeye eklenince kırmızı olur */
+        .whitelist-icon { width: 12px; height: 12px; }
 
-        /* Buton */
-        .action-btn {
-            background: #1cb3b4;
-            color: white;
-            border: none;
-            padding: 14px;
-            border-radius: 12px;
-            width: 100%;
-            font-weight: 600;
-            font-size: 14px;
-            cursor: pointer;
-            transition: all 0.2s ease;
-            box-shadow: 0 4px 12px rgba(28, 179, 180, 0.25);
-        }
-        .action-btn:hover {
-            background: #159b9c;
-            transform: translateY(-2px);
-            box-shadow: 0 6px 16px rgba(28, 179, 180, 0.4);
-        }
-        .action-btn:disabled {
-            background: #cbd5e1;
-            cursor: not-allowed;
-            transform: none;
-            box-shadow: none;
-        }
+        /* Animasyonlu Skor & Tooltip */
+        .score-wrapper { position: relative; width: 100px; height: 100px; margin: 0 auto 20px; display: flex; justify-content: center; align-items: center; background: #f8fafc; border-radius: 50%; box-shadow: inset 0 2px 4px rgba(0,0,0,0.02); transition: background 0.5s ease; cursor: help; }
+        .dynamic-icon { width: 42px; height: 42px; stroke: #1cb3b4; z-index: 2; transition: all 0.6s cubic-bezier(0.34, 1.56, 0.64, 1); }
+        .searching { animation: searchAnim 1.5s infinite ease-in-out alternate; }
+        @keyframes searchAnim { 0% { transform: translate(-8px, -8px) rotate(-10deg); } 100% { transform: translate(8px, 8px) rotate(10deg); } }
+        
+        .revealed-score { position: absolute; font-size: 48px; font-weight: 800; color: #1cb3b4; opacity: 0; transform: scale(0.5); transition: all 0.6s cubic-bezier(0.34, 1.56, 0.64, 1); z-index: 3; }
+        .reveal-mode .dynamic-icon { transform: scale(4); opacity: 0; }
+        .reveal-mode .revealed-score { opacity: 1; transform: scale(1); }
+
+        /* Tooltip (Fare Üzerine Gelince) */
+        .tooltip-text { visibility: hidden; width: 200px; background-color: #334155; color: #fff; text-align: center; border-radius: 8px; padding: 8px; position: absolute; z-index: 10; bottom: 110%; left: 50%; transform: translateX(-50%); opacity: 0; transition: opacity 0.3s; font-size: 11px; font-weight: 500; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
+        .tooltip-text::after { content: ""; position: absolute; top: 100%; left: 50%; margin-left: -5px; border-width: 5px; border-style: solid; border-color: #334155 transparent transparent transparent; }
+        .score-wrapper:hover .tooltip-text { visibility: visible; opacity: 1; }
+
+        .summary-box { background: #f8fafc; padding: 14px; border-radius: 12px; font-size: 13px; line-height: 1.5; color: #475569; text-align: center; margin-bottom: 20px; min-height: 50px; display: flex; align-items: center; justify-content: center; }
+
+        /* Blocker Switch */
+        .kalkan-container { display: flex; justify-content: space-between; align-items: center; background: #f8fafc; padding: 14px 16px; border-radius: 12px; border: 1px solid #e2e8f0; margin-bottom: 12px; }
+        .kalkan-text { font-weight: 600; font-size: 14px; color: #0f172a; }
+        .switch { position: relative; display: inline-block; width: 44px; height: 24px; }
+        .switch input { opacity: 0; width: 0; height: 0; }
+        .slider { position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background-color: #cbd5e1; transition: .4s; border-radius: 24px; }
+        .slider:before { position: absolute; content: ""; height: 18px; width: 18px; left: 3px; bottom: 3px; background-color: white; transition: .4s; border-radius: 50%; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+        input:checked + .slider { background-color: #1cb3b4; }
+        input:checked + .slider:before { transform: translateX(20px); }
+
+        /* Sayaç & Pulse Animasyonu */
+        .counter-wrapper { display: flex; justify-content: center; align-items: center; gap: 8px; font-size: 13px; color: #64748b; position: relative; }
+        .counter-wrapper span { font-weight: 800; color: #1cb3b4; font-size: 16px; transition: 0.3s; }
+        .pulse-effect { animation: pulseGreen 1s; }
+        @keyframes pulseGreen { 0% { color: #1cb3b4; transform: scale(1); } 50% { color: #10b981; transform: scale(1.5); } 100% { color: #1cb3b4; transform: scale(1); } }
+        
+        .reset-btn { background: none; border: none; color: #94a3b8; cursor: pointer; padding: 4px; border-radius: 4px; display: flex; align-items: center; transition: 0.3s; }
+        .reset-btn:hover { color: #ef4444; background: #f1f5f9; }
+        .reset-btn svg { width: 16px; height: 16px; transition: 0.3s; }
+        .reset-btn:active svg { transform: rotate(180deg); }
     </style>
 </head>
 <body>
+    <div class="app-wrapper">
+        <div class="header">
+            <h2>CookieExplainer</h2>
+            <!-- Whitelist Butonu -->
+            <div id="domain-badge" class="domain-badge" title="Bu sitede korumayı aç/kapat">
+                <svg class="whitelist-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+                </svg>
+                <span id="domain-name">Yükleniyor...</span>
+            </div>
+        </div>
 
-    <div class="header">
-        <h2>CookieExplainer</h2>
-        <span id="domain-name" class="domain-badge">Yükleniyor...</span>
-    </div>
+        <div id="score-container" class="score-wrapper">
+            <span class="tooltip-text" id="score-tooltip">Analiz ediliyor...</span>
+            <!-- Dinamik İkon (Büyüteç veya Kalkan) -->
+            <svg class="dynamic-icon searching" id="center-icon" viewBox="0 0 24 24" fill="none" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="11" cy="11" r="8"></circle>
+                <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+            </svg>
+            <div id="privacy-score" class="revealed-score"></div>
+        </div>
 
-    <!-- Animasyonlu Skor Alanı -->
-    <div id="score-container" class="score-wrapper">
-        <!-- SVG Büyüteç (Başlangıçta bu görünür ve hareket eder) -->
-        <svg class="mag-glass searching" id="mag-icon" viewBox="0 0 24 24" fill="none" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-            <circle cx="11" cy="11" r="8"></circle>
-            <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
-        </svg>
+        <div class="summary-box" id="ai-summary">
+            Sitenin politikaları ve çerezleri taranıyor...
+        </div>
+
+        <div class="kalkan-container">
+            <span class="kalkan-text">Cookie Blocker</span>
+            <label class="switch">
+                <input type="checkbox" id="blocker-toggle">
+                <span class="slider"></span>
+            </label>
+        </div>
         
-        <!-- Harf Skoru (Başlangıçta gizlidir, zoom sonrası ortaya çıkar) -->
-        <div id="privacy-score" class="revealed-score"></div>
+        <div class="counter-wrapper">
+            Bugüne kadar <span id="blocked-count">0</span> çerez reddedildi
+            <button id="reset-counter-btn" class="reset-btn" title="Sayacı Sıfırla">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"></path><path d="M3 3v5h5"></path>
+                </svg>
+            </button>
+        </div>
     </div>
-
-    <div class="summary-box" id="ai-summary">
-        Sitenin politikaları ve çerezleri taranıyor...
-    </div>
-
-    <button id="reject-btn" class="action-btn" disabled>Çerezleri Engelle</button>
-
     <script src="popup.js"></script>
 </body>
 </html>
