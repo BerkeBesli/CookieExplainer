@@ -1,4 +1,3 @@
-# app/services/llm_service.py
 import json
 import logging
 import re
@@ -8,7 +7,7 @@ from app.core.prompts import SYSTEM_PROMPT
 
 logger = logging.getLogger(__name__)
 
-# Groq İstemcisini Başlatıyoruz
+# Groq İstemcisii kaldırma
 client = Groq(api_key=settings.GROQ_API_KEY)
 
 def analyze_privacy_policy(policy_text: str) -> dict:
@@ -31,7 +30,6 @@ def analyze_privacy_policy(policy_text: str) -> dict:
             temperature=0.0, 
         )
         
-        # Gelen yanıtı alıyoruz
         result_text = chat_completion.choices[0].message.content.strip()
         
         # JSON yapısını bozabilecek olası Markdown etiketlerini (```json ... ```) temizliyoruz
