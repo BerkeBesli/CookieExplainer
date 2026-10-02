@@ -12,5 +12,5 @@ def get_db_client() -> Client:
         logger.error(f"Supabase bağlantı hatası: {e}")
         raise e
 
-# Uygulama genelinde kullanılacak tekil (singleton) DB nesnesi
+# Uygulama genelinde kullanılacak tekil DB nesnesi
 db = get_db_client()
