@@ -15,4 +15,4 @@ class AnalyzeResponse(BaseModel):
     summary: str
     technical_cookies: dict
     discrepancies: List[str]
-    source: str # Analizin nereden geldiğini belirten kısım: "cache" veya "live_analysis"
+    source: str 
