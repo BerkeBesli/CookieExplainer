@@ -4,26 +4,32 @@
     <meta charset="UTF-8">
     <title>CookieExplainer</title>
     <style>
-       /* popup.html - YENİ CSS */
+       /* MUTLAK SIFIRLAMA VE ZIRH */
+        * {
+            box-sizing: border-box !important;
+            margin: 0;
+            padding: 0;
+        }
+
         html, body {
             width: 320px !important;
             height: 480px !important;
-            margin: 0 !important;
-            padding: 0 !important;
-            background-color: #1cb3b4 !important; /* Arka plan TIKLIM TIKLIM TURKUAZ */
-            border-radius: 0 !important; /* Dış pencerede ASLA yuvarlama yok, köşeleri doldur */
+            background-color: #1cb3b4 !important; 
+            border-radius: 0 !important; 
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            color: #1e293b;
             overflow: hidden !important;
         }
 
         .app-wrapper {
-            background-color: #ffffff; /* Senin dediğin ortadaki beyaz kısım */
+            background-color: #ffffff;
             margin: 6px !important; /* Dışarıdan 6px turkuaz pay bırak */
             height: calc(100% - 12px) !important;
-            border-radius: 12px !important; /* Sadece beyaz alanı yuvarla */
+            border-radius: 12px !important; /* Sadece İÇERİDEKİ beyaz alanı yuvarla */
             padding: 16px 20px;
-            box-sizing: border-box;
             display: flex;
             flex-direction: column;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
         }
         /* Sayacın en altta sabit durması için */
         .counter-wrapper {
