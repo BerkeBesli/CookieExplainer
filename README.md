@@ -67,7 +67,7 @@ python -m uvicorn app.main:app --reload
 4. Klonladığınız proje dizinindeki `extension` klasörünü seçin.
 5. CookieExplainer tarayıcınıza eklenecektir!
 
-## 🔮 Gelecek Planları (Faz 3)
+## 🔮 Gelecek Planları 
 * **Web Scraper Entegrasyonu:** Ana sayfada sözleşme bulunmadığı durumlarda (örn. YouTube), eklentinin sayfa altındaki "Gizlilik Politikası" linklerini otomatik bulup o sayfanın içine dalarak okuması.
 * **Çoklu Dil Desteği:** LLM promptlarının tarayıcı diline göre dinamik olarak İngilizce/Türkçe yanıt üretmesi.
 
