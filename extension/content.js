@@ -74,7 +74,7 @@ function huntAndDestroy() {
         return;
     }
 
-    // HAMLE 4 (SON ÇARE): Tümünü Kabul Et (HyperX ve benzerleri için)
+    // HAMLE 4 (SON): Tümünü Kabul Et 
     let acceptAllBtn = findBtn(acceptAllKeywords);
     if (acceptAllBtn) {
         console.log("[CookieExplainer] Hamle 4 Başarılı: Son çare olarak Kabul Et vuruldu!");
