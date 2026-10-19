@@ -60,7 +60,6 @@ def calculate_privacy_score(llm_analysis: dict, classified_cookies: dict) -> tup
     if isinstance(user_rights, list) and len(user_rights) > 0:
         score += 10
         
-    # Skoru 0-100 arasında sınırla
     score = max(0, min(100, score))
     
     # Yeni ve Daha Adil Harf Notu Kırılımı
