@@ -25,14 +25,14 @@ def analyze_privacy_policy(policy_text: str) -> dict:
                     "content": f"Aşağıdaki metni analiz et:\n\n{safe_text}"
                 }
             ],
-            model="openai/gpt-oss-20b", # <-- BURAYI DEĞİŞTİRDİK (Eski ve %100 açık olan temel Llama 3 sürümü)
+            model="openai/gpt-oss-20b", 
             response_format={"type": "json_object"}, 
             temperature=0.0, 
         )
         
         result_text = chat_completion.choices[0].message.content.strip()
         
-        # JSON yapısını bozabilecek olası Markdown etiketlerini (```json ... ```) temizliyoruz
+        # JSON yapısını bozabilecek olası Markdown etiketlerini temizleme işlemleri
         if result_text.startswith("```"):
             result_text = re.sub(r"^```json", "", result_text, flags=re.IGNORECASE)
             result_text = re.sub(r"```$", "", result_text).strip()
