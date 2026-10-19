@@ -47,7 +47,7 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
         return true; // Asenkron işlem beklemesi için şart!
     }
     
-    // 2. SAYAÇ ARTIRMA İŞLEMİ (Saha ajanından gelen tetikleyici)
+    // 2. SAYAÇ ARTIRMA İŞLEMİ 
     else if (request.action === "INCREMENT_BLOCKED_COUNT") {
         chrome.storage.local.get(["blockedCount"], (result) => {
             let count = result.blockedCount || 0;
