@@ -5,18 +5,18 @@ CookieExplainer, kullanıcıların web sitelerindeki çerez karmaşasından kurt
 
 ## 🚀 Öne Çıkan Özellikler 
 
-*   **🛡️ 3 Aşamalı Otonom Kalkan (Terminator Bot):** Sitelere girdiğinizde sinsi çerez pop-up'larını arka planda yok eder. "Reddet" butonu gizlenmiş olsa bile sırasıyla şu 3 hamleyi yapar:
+*   **🛡️ 3 Aşamalı Otonom Kalkan:** Sitelere girdiğinizde sinsi çerez pop-up'larını arka planda yok eder. "Reddet" butonu gizlenmiş olsa bile sırasıyla şu 3 hamleyi yapar:
     1. "Tümünü Reddet" butonunu arar ve vurur.
     2. Bulamazsa, "Sadece Zorunlu Olanları Kabul Et" seçeneğiyle takipçileri bloklar.
     3. Hileli sitelerde "Ayarlar" menüsüne sızıp tercihleri güvenli şekilde kaydeder.
  
 *   **🧠 Yapay Zeka Destekli Analiz:** Sayfa metinlerini **Groq API (OpenAI/GPT-OSS-20B)** ile analiz eder. Hukuki ve karmaşık gizlilik metinlerini saniyeler içinde A'dan F'ye kadar skorlayarak basit bir dille özetler.
   
-*   **⚡ Kendi Kendini İyileştiren Önbellek (Self-Healing Cache):** Analiz edilen siteler **Supabase (PostgreSQL)** üzerinde 30 gün boyunca saklanır. Aynı siteye tekrar girildiğinde API maliyeti sıfıra iner ve yanıt hızı milisaniyelere düşer. API hatalarında cache kendini otomatik temizler.
+*   **⚡ Kendi Kendini İyileştiren Önbellek:** Analiz edilen siteler **Supabase (PostgreSQL)** üzerinde 30 gün boyunca saklanır. Aynı siteye tekrar girildiğinde API maliyeti sıfıra iner ve yanıt hızı milisaniyelere düşer. API hatalarında cache kendini otomatik temizler.
   
 *   **✨ Yüzen Kart Arayüzü:** Özel turkuaz tasarım, dinamik ikon animasyonları, engellenen çerez sayacı ve kullanıcının güvendiği siteler için tek tıkla **Whitelist (Güvenilir Liste)** yönetimi.
 
-## 🛠️ Mimari ve Teknoloji Yığını (Tech Stack)
+## 🛠️ Mimari
 
 Proje, frontend ve backend olarak izole edilmiş bir **Monorepo** mimarisine sahiptir:
 
