@@ -1,5 +1,5 @@
 # CookieExplainer 🍪🛡️
-**AI-Powered Privacy Assistant & Autonomous Cookie Blocker**
+**Yapay Zeka Destekli Güvenlik Asistanı**
 
 CookieExplainer, kullanıcıların web sitelerindeki çerez karmaşasından kurtulmasını sağlayan, gizlilik politikalarını yapay zeka ile saniyeler içinde özetleyen ve "Dark Pattern" (karanlık tasarım) çerez tuzaklarını otonom olarak alt eden modern bir Chrome eklentisidir.
 
@@ -37,7 +37,7 @@ CookieExplainer/
     └── popup.html / .js   # Kullanıcı Arayüzü
 ```
 
-## ⚙️ Kurulum ve Çalıştırma (Geliştiriciler İçin)
+## ⚙️ Kurulum ve Çalıştırma 
 
 Projeyi kendi lokal ortamınızda test etmek için aşağıdaki adımları izleyin:
 
